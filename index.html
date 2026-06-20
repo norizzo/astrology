@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>占星術は「特別な存在」か — 計算・解釈・権威をめぐる考察</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0b0f1f;
+    --ink-2:#141a33;
+    --panel:#1b2240;
+    --paper:#f5f2ea;
+    --paper-2:#ece7d9;
+    --star:#e8c66b;
+    --star-soft:#c9a84f;
+    --mist:#8b93b8;
+    --line:rgba(232,198,107,.22);
+    --text-on-dark:#e7e9f3;
+    --text-on-light:#23283d;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text-on-dark);
+    font-family:"Zen Kaku Gothic New",sans-serif;
+    font-size:17px;
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:78vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 0 80px;
+    overflow:hidden;
+  }
+  #sky{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;}
+  .hero .wrap{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:"Spectral",serif;
+    font-style:italic;
+    letter-spacing:.04em;
+    color:var(--star);
+    font-size:15px;
+    margin:0 0 22px;
+    opacity:0;animation:rise .9s .2s forwards;
+  }
+  h1.title{
+    font-family:"Shippori Mincho",serif;
+    font-weight:800;
+    font-size:clamp(34px,6.4vw,58px);
+    line-height:1.28;
+    margin:0 0 28px;
+    letter-spacing:.01em;
+    color:#fff;
+  }
+  h1.title .q{color:var(--star);}
+  h1.title span{display:block;opacity:0;animation:rise .9s forwards;}
+  h1.title span:nth-child(1){animation-delay:.35s;}
+  h1.title span:nth-child(2){animation-delay:.5s;}
+  .sub{
+    font-family:"Spectral",serif;
+    color:var(--mist);
+    font-size:18px;
+    max-width:30em;
+    opacity:0;animation:rise .9s .75s forwards;
+  }
+  .scroll-cue{
+    margin-top:54px;font-size:13px;letter-spacing:.3em;color:var(--star-soft);
+    opacity:0;animation:rise .9s 1s forwards;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- Thesis strip ---------- */
+  .thesis{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:64px 0;
+  }
+  .thesis p{
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(20px,3vw,26px);
+    line-height:1.85;
+    margin:0;
+    color:#fff;
+  }
+  .thesis .lead{color:var(--star);font-weight:700;}
+
+  /* ---------- Sections ---------- */
+  section.chapter{padding:72px 0;}
+  .chapnum{
+    font-family:"Spectral",serif;
+    font-style:italic;
+    color:var(--star);
+    font-size:15px;
+    letter-spacing:.12em;
+    margin:0 0 10px;
+  }
+  h2{
+    font-family:"Shippori Mincho",serif;
+    font-weight:700;
+    font-size:clamp(24px,4vw,32px);
+    line-height:1.4;
+    margin:0 0 26px;
+    color:#fff;
+    position:relative;
+    padding-bottom:18px;
+  }
+  h2::after{
+    content:"";position:absolute;left:0;bottom:0;
+    width:54px;height:2px;background:var(--star);
+  }
+  h3{
+    font-family:"Zen Kaku Gothic New",sans-serif;
+    font-weight:700;font-size:18px;
+    color:var(--star);
+    margin:34px 0 12px;
+  }
+  p{margin:0 0 20px;color:var(--text-on-dark);}
+  .muted{color:var(--mist);}
+  strong{color:#fff;font-weight:700;}
+
+  ul.clean{list-style:none;padding:0;margin:0 0 22px;}
+  ul.clean li{
+    position:relative;padding:0 0 16px 28px;margin:0;
+    color:var(--text-on-dark);
+  }
+  ul.clean li::before{
+    content:"✦";position:absolute;left:0;top:1px;
+    color:var(--star-soft);font-size:13px;
+  }
+  ul.clean li b{color:#fff;}
+
+  /* ---------- Calculation vs Interpretation visual ---------- */
+  .split{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 8px;
+  }
+  .split .card{
+    border:1px solid var(--line);border-radius:14px;padding:24px 22px;
+    background:linear-gradient(180deg,rgba(232,198,107,.04),transparent);
+  }
+  .split .card.calc{background:linear-gradient(180deg,rgba(120,150,230,.07),transparent);}
+  .split .card h4{
+    margin:0 0 10px;font-family:"Shippori Mincho",serif;font-size:19px;color:#fff;
+  }
+  .split .card .tag{
+    font-family:"Spectral",serif;font-style:italic;font-size:13px;
+    color:var(--star);display:block;margin-bottom:14px;
+  }
+  .split .card.calc .tag{color:#9db2ee;}
+  .split .card p{font-size:15px;margin:0;color:var(--mist);}
+
+  blockquote{
+    margin:30px 0;padding:22px 26px;
+    border-left:2px solid var(--star);
+    background:rgba(232,198,107,.05);
+    border-radius:0 10px 10px 0;
+  }
+  blockquote p{margin:0;font-family:"Spectral",serif;font-style:italic;color:#f0ead8;font-size:17px;}
+
+  /* evidence cards */
+  .evidence-intro{font-weight:700;color:#fff;margin:26px 0 16px;}
+  .evidence{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 24px;
+  }
+  .ev-card{
+    border:1px solid var(--line);border-radius:13px;padding:20px;
+    background:linear-gradient(180deg,rgba(232,198,107,.04),transparent);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .ev-stat{
+    font-family:"Spectral",serif;font-weight:600;
+    font-size:24px;color:var(--star);letter-spacing:.01em;
+  }
+  .ev-body{font-size:14.5px;line-height:1.75;color:var(--text-on-dark);}
+  .ev-body b{color:#fff;}
+  .ev-src{
+    margin-top:auto;font-size:12px;color:var(--mist);
+    font-family:"Spectral",serif;font-style:italic;
+    padding-top:8px;border-top:1px solid rgba(232,198,107,.12);
+  }
+  .footnote{
+    font-size:13.5px;line-height:1.85;color:var(--mist);
+    border-left:2px solid rgba(139,147,184,.4);
+    padding:4px 0 4px 16px;margin:18px 0 24px;
+  }
+
+  /* ---------- Summary table ---------- */
+  .layer-table{
+    margin:32px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  }
+  .layer-row{
+    display:grid;grid-template-columns:34% 66%;
+    border-bottom:1px solid var(--line);
+  }
+  .layer-row:last-child{border-bottom:none;}
+  .layer-row .k{
+    padding:20px 22px;font-weight:700;color:var(--star);
+    background:rgba(232,198,107,.04);font-size:15px;
+    display:flex;align-items:center;
+  }
+  .layer-row .v{padding:20px 22px;color:var(--text-on-dark);font-size:15px;}
+
+  /* ---------- Conclusion ---------- */
+  .conclusion{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+    padding:80px 0;
+  }
+  .verdict{
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(22px,3.4vw,30px);
+    line-height:1.75;color:#fff;margin:0 0 28px;
+  }
+  .verdict .hl{
+    color:var(--star);
+    border-bottom:1px solid var(--star-soft);
+    padding-bottom:1px;
+  }
+  .three-layer{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 0;}
+  .chip{
+    font-family:"Spectral",serif;font-style:italic;
+    border:1px solid var(--line);border-radius:999px;
+    padding:8px 18px;font-size:15px;color:#f0ead8;
+  }
+  .chip.on{
+    border-color:var(--star);
+    background:rgba(232,198,107,.12);
+    color:var(--star);font-weight:600;
+  }
+  .closing{
+    margin:40px 0 0;
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(19px,2.8vw,24px);
+    line-height:1.9;color:#fff;
+  }
+
+  /* axis comparison */
+  .axis{
+    margin:28px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  }
+  .axis-row{
+    display:grid;grid-template-columns:28% 72%;
+    border-bottom:1px solid var(--line);
+  }
+  .axis-row:last-child{border-bottom:none;}
+  .axis-k{
+    padding:22px;font-family:"Shippori Mincho",serif;font-weight:700;
+    font-size:18px;color:#fff;background:rgba(255,255,255,.02);
+    display:flex;align-items:center;
+  }
+  .axis-v{padding:22px;font-size:15px;color:var(--text-on-dark);}
+  .axis-judge{display:block;margin-top:8px;font-size:14px;font-weight:700;}
+  .axis-judge.no{color:#c98a8a;}
+  .axis-judge.yes{color:var(--star);}
+
+  /* reward loop */
+  .loop{margin:30px 0;display:flex;flex-direction:column;align-items:stretch;gap:6px;}
+  .loop-step{
+    border:1px solid var(--line);border-radius:11px;
+    padding:16px 18px 16px 16px;
+    background:linear-gradient(180deg,rgba(232,198,107,.05),transparent);
+    font-size:15px;color:var(--text-on-dark);
+    display:flex;align-items:center;gap:14px;line-height:1.6;
+  }
+  .loop-n{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+    background:var(--star);color:var(--ink);
+    font-family:"Spectral",serif;font-weight:600;font-size:15px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .loop-note{color:var(--mist);font-style:italic;font-family:"Spectral",serif;font-size:13px;margin-left:4px;}
+  .loop-arrow{text-align:center;color:var(--star-soft);font-size:15px;line-height:1;}
+  .loop-back{
+    text-align:center;color:var(--star);font-family:"Spectral",serif;
+    font-style:italic;font-size:13.5px;margin-top:8px;
+    padding-top:10px;border-top:1px dashed rgba(232,198,107,.3);
+  }
+
+  .coda{
+    margin:26px 0 0;padding-top:22px;
+    border-top:1px solid var(--line);
+    font-family:"Spectral",serif;color:var(--mist);
+    font-size:16px;line-height:1.8;font-style:italic;
+  }
+
+  footer{
+    padding:48px 0 70px;text-align:center;
+  }
+  footer p{font-size:13px;color:var(--mist);margin:0;line-height:1.8;}
+  footer .rule{
+    width:60px;height:1px;background:var(--line);margin:0 auto 26px;
+  }
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  @media(max-width:600px){
+    body{font-size:16px;}
+    .split{grid-template-columns:1fr;}
+    .evidence{grid-template-columns:1fr;}
+    .layer-row{grid-template-columns:1fr;}
+    .layer-row .k{border-bottom:1px solid var(--line);}
+    .axis-row{grid-template-columns:1fr;}
+    .axis-k{border-bottom:1px solid var(--line);}
+    .hero{min-height:70vh;padding:96px 0 60px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+    .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="sky"></canvas>
+  <div class="wrap">
+    <p class="eyebrow">A Critical Inquiry · 考察レポート</p>
+    <h1 class="title"><span>占星術は</span><span>「特別な存在」<span class="q">か</span></span></h1>
+    <p class="sub">計算は精密で、解釈は自在だ。その隙間に、占星術の正体がある。</p>
+    <p class="scroll-cue">SCROLL ↓</p>
+  </div>
+</header>
+
+<div class="thesis">
+  <div class="wrap reveal">
+    <p>本稿は、占星術が<span class="lead">統計学や客観的根拠に基づくものなのか</span>、そして他の占いと比べて特別な存在なのかを、計算・解釈・権威という三つの視点から段階的に検討する。</p>
+  </div>
+</div>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">01</p>
+    <h2>同じ生年月日でも、結果は変わる</h2>
+    <p>占星術には西洋占星術、インド占星術（ヴェーダ占星術）、中国占星術といった複数の体系がある。同じ生年月日でも、体系が異なれば結果は大きく変わる。「どの占星術でも同じ傾向になる」とは言えない。</p>
+    <ul class="clean">
+      <li><b>黄道帯の取り方</b>：西洋はトロピカル方式（春分点基準）、インドはサイデリアル方式（恒星基準）。歳差運動により両者は約24度ずれ、星座が1つ前にずれることが多い。</li>
+      <li><b>重視する要素</b>：西洋は太陽星座、インドは月星座やアセンダント（ラグナ）を中心に読む。主役そのものが変わる。</li>
+      <li><b>中国占星術</b>：星の位置を用いず、干支や陰陽五行で読む全く別の体系。比較の土俵が異なる。</li>
+    </ul>
+    <p class="muted">割り当てられる星座も、重視する点も、用いる理論も体系ごとに異なる。結果は変わると考えるのが正確である。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">02</p>
+    <h2>占星術は統計学ではない</h2>
+    <p>統計学には、体系的なデータ収集・仮説・対照群との比較・相関や因果の検定・再現性の確認といった手続きが必要だ。占星術にはこの過程がない。記号と意味の対応（火星は闘争、金星は愛）は統計的集計ではなく、神話・象徴・伝統に由来する。さらに重要なのは、占星術の主張は実際に科学的手法で検証されてきた、という点だ。結果は一貫している。</p>
+
+    <p class="evidence-intro">星座・出生図と性格の関連を調べた主な実証研究：</p>
+    <div class="evidence">
+      <div class="ev-card">
+        <div class="ev-stat">N≈100,000</div>
+        <div class="ev-body"><b>大規模データ解析（2022年）</b><br>10万人超の性格データを分析しても、星座と性格特性のあいだに意味のある相関は見られなかった。占星術を信じる人に限っても同様だった。</div>
+        <div class="ev-src">Psychology Today, S. McGreal による分析</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-stat">N=3,074</div>
+        <div class="ev-body"><b>スイスの大規模研究</b><br>3,074人の男性を対象に標準化された性格検査（Freiburg Personality Inventory）を用いたが、星座と性格特性に統計的な結びつきは確認されなかった。</div>
+        <div class="ev-src">Swiss study, Freiburg Personality Inventory</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-stat">N=1,200</div>
+        <div class="ev-body"><b>印・スウェーデン比較研究</b><br>占星信仰の高い国と低い国の1,200人を比較。星座と実際の性格（Big Five）に有意な相関はなく、信じる人ほど「当たっている」と過大評価した（p&lt;.001）。</div>
+        <div class="ev-src">Cross-cultural study, India / Sweden, BFI</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-stat">二重盲検</div>
+        <div class="ev-body"><b>Wyman &amp; Vyse（2008年）</b><br>被験者は心理検査による自分の説明は偶然以上の精度で選べたが、占星術による自分の説明は選べなかった。両者にバーナム効果が観察された。</div>
+        <div class="ev-src">The Journal of General Psychology, 135(3)</div>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>最も有名な検証は、物理学者ショーン・カールソンが1985年に『Nature』誌（vol.318, pp.419–425）で発表した二重盲検実験である。プロの占星術師は、出生図と性格プロフィールを偶然以上の精度で対応づけることができなかった。</p>
+    </blockquote>
+    <p class="footnote">※ 公正のために付記すると、カールソン実験は後年、占星術擁護派の研究者（Ertel ら）によって再分析され、データを全体として扱えば統計的に有意に近い結果（p≈.04〜.05）が得られると主張された。ただしこの再分析をもってしても「占星術が実証された」とまでは言えず、提唱者自身も結論を保留している。いずれにせよ、上記の大規模研究群が示す「関連なし」という全体傾向は揺らいでいない。</p>
+
+    <h3>では、なぜ「当たる」と感じるのか</h3>
+    <ul class="clean">
+      <li><b>バーナム効果（フォアラー効果）</b>：誰にでも当てはまる曖昧な記述を、自分のことだと感じる。上記の複数研究で繰り返し確認されている。</li>
+      <li><b>確証バイアス</b>：当たった部分だけ記憶し、外れを忘れる。</li>
+      <li><b>解釈の柔軟さ</b>：後からどうとでも説明できる。</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">03</p>
+    <h2>計算と解釈は、別のものだ</h2>
+    <p>ホロスコープには性質の異なる二つの層がある。これを分けることが、議論の鍵になる。</p>
+    <div class="split">
+      <div class="card calc">
+        <span class="tag">fixed · 誰がやっても同じ</span>
+        <h4>計算</h4>
+        <p>天体の位置、ハウス、アスペクトの角度。天文学的な計算であり、同じ方式なら必ず同じ結果が出る。名人芸は不要で、ソフトでも自動で出る。</p>
+      </div>
+      <div class="card">
+        <span class="tag">free · 人によって変わる</span>
+        <h4>解釈</h4>
+        <p>同じ配置図をどう物語として読み、どの問いに結びつけ、どう言葉にするか。ここは人によって変わる。だから「プロ」が成立する。</p>
+      </div>
+    </div>
+    <p>もし占星術が統計学なら、解釈に個人差は出ず、名人は不要なはずだ。プロが存在し解釈が分かれるという事実は、むしろ<strong>占星術が統計学ではない</strong>ことの傍証になる。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">04</p>
+    <h2>ならば、計算は必要なのか</h2>
+    <p>計算が結論の正しさに寄与せず、解釈次第で結論がいかようにもなるなら——計算部分は本当に必要なのか。「必要性」を二つの意味に分けると整理できる。</p>
+    <h3>(A) 正しい結論を出すために — 不要</h3>
+    <p>解釈側で何とでもなる以上、入力となる天体配置は結論の真偽に寄与していない。他人のホロスコープを「あなたのものです」と渡しても高い満足度が得られるという実験結果は、計算部分が結論を支えていないことの強い証拠だ。</p>
+    <h3>(B) 占いという営みのために — 必要</h3>
+    <ul class="clean">
+      <li><b>権威づけ</b>：精密な天体計算という「動かせない客観的な何か」が土台にあることで、解釈に説得力と特別感が生まれる。</li>
+      <li><b>制約による創造性</b>：読み解く対象を与えることで、解釈を引き出す装置になる。タロットやコーヒーの澱と同じ構造だ。</li>
+    </ul>
+    <blockquote>
+      <p>占星術における計算とは、「答えを出す装置」ではなく「答えを受け入れさせる舞台装置」である。</p>
+    </blockquote>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">05</p>
+    <h2>占星術の位置づけ</h2>
+    <p>占星術は天文学の隣にいることで権威を借りているにすぎず、機能としてはタロット・易・手相・おみくじと同じ構造を持つ。予測的中の科学的根拠という点で、他の占術より優れているという証拠はない。</p>
+    <p>その効力は受け手の心理（権威づけ・意味づけ・各種バイアス）の上に成り立つ。ゆえに、その心理を持たない存在にとって、占星術の出力は予測手段として意味を持たない。ただし「無意味」と言えるのは<strong>予測・真理の道具として見たとき</strong>に限られる。</p>
+    <div class="layer-table">
+      <div class="layer-row">
+        <div class="k">真理を当てる道具として</div>
+        <div class="v">客観的根拠はなく、信じる心理を持たない者には無意味。</div>
+      </div>
+      <div class="layer-row">
+        <div class="k">占いという営みとして</div>
+        <div class="v">数ある占術の一つにすぎず、特別な存在ではない。</div>
+      </div>
+      <div class="layer-row">
+        <div class="k">体験・文化・内省として</div>
+        <div class="v">根拠の有無とは別の次元で、人にとって意味を持ちうる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">06</p>
+    <h2>もう一つの次元 — 真理と意味は別物だ</h2>
+    <p>ここまでの批判は取り下げない。占星術は<strong>真理の次元では無根拠</strong>であり、予測の道具としては凡庸だ。この判定は揺るがない。だが、それは占星術を測る物差しが一つだけだという前提に立っている。実際には、人間を評価する軸は二つある。</p>
+    <div class="axis">
+      <div class="axis-row">
+        <div class="axis-k">真理の次元</div>
+        <div class="axis-v">客観的に正しいか。検証・再現・的中率で測る。<span class="axis-judge no">占星術はここで失格する。</span></div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-k">意味の次元</div>
+        <div class="axis-v">人間にとって何かを意味するか。物語・秩序・納得で測る。<span class="axis-judge yes">占星術はここで機能する。</span></div>
+      </div>
+    </div>
+    <p>重要なのは、この二つが<strong>別の次元であって、優劣関係にない</strong>という点だ。意味の次元で機能することは、真理の次元での無根拠を埋め合わせない。逆もまた然りで、真理の次元で失格することは、意味の次元での働きを否定しない。両者は同じ軸の上で競合していない。</p>
+    <p>そして人間は、真理の次元だけで生きてはいない。事実の集積だけでなく、<strong>意味の中で生きる存在</strong>である。不確かな人生に秩序を与え、偶然に物語を読み込み、無関係な出来事を結びつけて理解しようとする——この営みは、宗教・物語・儀式・貨幣・国家など、人間が築いてきたものの多くに共通する。占星術もその系譜に属する一形態だ。</p>
+    <p class="muted">星に意味を読む行為は、的中するから価値があるのではない。人間が世界に物語を重ねずにはいられない生き物だから、成立している。占星術が消えないのは、それが当たるからではなく、人間が意味を必要とするからである。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap reveal">
+    <p class="chapnum">07</p>
+    <h2>構造としての欺瞞 — 建前と実運用の乖離</h2>
+    <p>ここまで、占星術と詐欺を分けるのは「欺く意図」や「合意の透明性」だと整理してきた。だが、その線引きには実態との乖離がある。占いは形式上「これは占いである」という了解の上で行われる——しかしそれは<strong>建前の層</strong>にすぎない。その下で受け手が実際に何を信じているかは、別の層にある。</p>
+    <p>多くの受け手は「所詮占いだから」とは思っていない。<strong>当たる＝真実に相当する</strong>ものとして受け取っている。そして、この乖離は偶然ではなく、報酬構造によって駆動されている。</p>
+
+    <div class="loop">
+      <div class="loop-step"><span class="loop-n">1</span>占い師の報酬は「当たる」という評判で上がる</div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step"><span class="loop-n">2</span>提供側に「真実だと信じさせる」動機が組み込まれる</div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step"><span class="loop-n">3</span>受け手は高い対価を払うほど「本物のはず」と信じる<span class="loop-note">(認知的不協和)</span></div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step"><span class="loop-n">4</span>高額化と盲信化が連動して進む</div>
+      <div class="loop-back">↑ 評判がさらに報酬を押し上げる</div>
+    </div>
+
+    <p>建前では「占いだから」と免責を確保しつつ、実運用では真実相当性を演出して報酬を最大化する。この二枚舌が、個人の悪意としてではなく<strong>制度として</strong>成立してしまう。提供者自身が自分の体系を信じていても、報酬が「当たること」に連動する以上、システムが欺瞞的な振る舞いを選択させる。</p>
+    <p>そうなると、占星術と詐欺を分ける確かな境界は、内面の「悪意」ではなくなる。残るのは<strong>実害の有無と、それに対して社会が引く一線</strong>だけだ。受け手の判断力につけ込み、回復不能な損害を与えたとき——霊感商法が詐欺として摘発されるのはこの一線を越えたときで、それ以外の広大なグレーゾーンは、乖離を社会が黙認している領域である。</p>
+    <blockquote>
+      <p>これは占いに限らない。広告、金融商品の販売、一部のコンサルティングや医療——「効果がある」という期待に報酬が連動し、形式上は「保証はしていません」と免責する領域では、同じ乖離が繰り返し現れる。建前で身を守りながら、実運用で期待を売る。これは個人の道徳ではなく、構造の問題だ。</p>
+    </blockquote>
+  </div>
+</section>
+
+<section class="conclusion">
+  <div class="wrap reveal">
+    <p class="chapnum">結論</p>
+    <p class="verdict">占星術は、真理の次元では根拠を持たない。だが人間は、真理の次元だけで生きる存在ではない。</p>
+    <p class="muted">二つの次元を分けて捉えれば、評価は一文に収まる——</p>
+    <div class="three-layer">
+      <span class="chip">真理としては、無根拠</span>
+      <span class="chip">道具としては、凡庸</span>
+      <span class="chip on">意味としては、人間そのもの</span>
+    </div>
+    <p class="closing">人間は、想像の世界に生きる生き物である。<br>占星術はその証明の一つにすぎない。</p>
+    <p class="coda">ただし、その想像する力につけ込む構造もまた、人間社会の一部である。境界を引くのは、悪意ではなく、実害だ。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="rule"></div>
+    <p>本レポートは議論の整理を目的としたものであり、<br>特定の占術の利用を推奨・否定するものではありません。</p>
+  </div>
+</footer>
+
+<script>
+// --- starfield ---
+(function(){
+  const c = document.getElementById('sky');
+  const ctx = c.getContext('2d');
+  let w,h,stars,dpr;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function init(){
+    dpr = Math.min(window.devicePixelRatio||1,2);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = w*dpr; c.height = h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const count = Math.floor(w*h/6500);
+    stars = Array.from({length:count},()=>({
+      x:Math.random()*w, y:Math.random()*h,
+      r:Math.random()*1.4+0.2,
+      base:Math.random()*0.5+0.25,
+      sp:Math.random()*0.018+0.004,
+      ph:Math.random()*Math.PI*2
+    }));
+  }
+  function draw(t){
+    // gradient backdrop
+    const g = ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#0a0e1d');
+    g.addColorStop(0.55,'#0d1228');
+    g.addColorStop(1,'#11162e');
+    ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    // soft galactic glow
+    const rg = ctx.createRadialGradient(w*0.72,h*0.3,0,w*0.72,h*0.3,Math.max(w,h)*0.6);
+    rg.addColorStop(0,'rgba(232,198,107,0.06)');
+    rg.addColorStop(1,'rgba(232,198,107,0)');
+    ctx.fillStyle=rg; ctx.fillRect(0,0,w,h);
+    for(const s of stars){
+      const tw = reduce ? s.base : s.base + Math.sin(t*s.sp + s.ph)*0.28;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(245,240,225,'+Math.max(0,tw)+')';
+      ctx.fill();
+    }
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{init();if(reduce)draw(0);});
+  init();
+  if(reduce) draw(0); else requestAnimationFrame(draw);
+})();
+
+// --- scroll reveal ---
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('in'));return;}
+  const io = new IntersectionObserver((ents)=>{
+    ents.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:0.15});
+  els.forEach(e=>io.observe(e));
+})();
+</script>
+</body>
+</html>
